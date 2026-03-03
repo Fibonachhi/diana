@@ -1,15 +1,31 @@
-# Diana Mini App
+# Plus One Mini App
 
-MVP Telegram Mini App для блоггера Дианы Листопад.
+Telegram Mini App for project "Плюс один".
 
 ## Stack
 
-- Next.js 16 (App Router)
-- Telegram WebApp JS API
-- Supabase
+- Next.js 16 + TypeScript (App Router)
+- Supabase Postgres + RLS
+- Supabase Edge Functions (scaffold)
 - Vercel
 
-## Быстрый старт
+## Current Phase
+
+Implemented (Phase 1):
+
+- App shell and user routes:
+  - `/`
+  - `/events`
+  - `/me`
+  - `/admin`
+- Telegram initData auth endpoint:
+  - `POST /api/auth/telegram`
+- Supabase schema + RLS migration:
+  - `supabase/migrations/20260303_001_init_plus_one.sql`
+- Edge function scaffold:
+  - `supabase/functions/telegram-auth/index.ts`
+
+## Quick Start
 
 ```bash
 npm install
@@ -17,25 +33,43 @@ cp .env.example .env.local
 npm run dev
 ```
 
-Открой [http://localhost:3000](http://localhost:3000).
-
-## ENV
+## Environment Variables
 
 ```env
 NEXT_PUBLIC_SUPABASE_URL=
 NEXT_PUBLIC_SUPABASE_ANON_KEY=
+SUPABASE_SERVICE_ROLE_KEY=
 TELEGRAM_BOT_TOKEN=
+
+# local ops
+SUPABASE_ACCESS_TOKEN=
+GITHUB_FINE_GRAINED_PAT=
+VERCEL_TOKEN=
 ```
 
-## Что нужно для запуска в Telegram
+## Supabase
 
-1. Созданный бот в BotFather.
-2. Деплой на Vercel с HTTPS URL.
-3. В BotFather (`/mybots` -> Bot Settings -> Menu Button) указать URL Mini App.
-4. Подключить таблицы в Supabase и RLS-политики.
+Migration already applied to project `hochlyqmyhhkshtqzekh`.
 
-## Следующие шаги
+Main tables:
 
-1. Добавить серверную валидацию `initData` по `TELEGRAM_BOT_TOKEN`.
-2. Сохранение/обновление пользователя в `profiles` через Supabase.
-3. Бизнес-экраны Дианы: контент, заявки, оплаты/подписки.
+- `profiles`
+- `cities`
+- `events`
+- `event_registrations`
+- `waitlist`
+- `payments`
+- `attendance`
+- `swipes`
+- `matches`
+- `roles`
+- `analytics_events`
+
+All have RLS enabled.
+
+## Next Phase (Phase 2)
+
+- Event CRUD in admin
+- Registration + waitlist flow
+- Payment create + webhook
+- Hold expiration job (`pending_payment` -> `expired`)
