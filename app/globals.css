@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f8f8f6;
+  --background: #fdfbf8;
   --foreground: #171512;
 }
 
@@ -18,9 +18,81 @@
 body {
   margin: 0;
   background:
-    radial-gradient(circle at 10% 20%, #ffe7cd 0%, transparent 35%),
-    radial-gradient(circle at 80% 10%, #ffe1ee 0%, transparent 30%),
-    linear-gradient(145deg, #fff9f1 0%, #fff 55%, #fff4f8 100%);
+    radial-gradient(circle at 5% 15%, #ffe8cd 0%, transparent 35%),
+    radial-gradient(circle at 85% 10%, #ffe7ef 0%, transparent 32%),
+    linear-gradient(150deg, #fff9f1 0%, #fff 48%, #fff4f8 100%);
   color: var(--foreground);
   font-family: var(--font-manrope), sans-serif;
+}
+
+.primary-btn {
+  display: block;
+  width: 100%;
+  border-radius: 14px;
+  border: none;
+  background: #171512;
+  color: #fff;
+  text-align: center;
+  padding: 0.8rem 1rem;
+  font-size: 0.96rem;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+}
+
+.primary-btn:hover {
+  opacity: 0.92;
+  transform: translateY(-1px);
+}
+
+.secondary-btn {
+  display: block;
+  width: 100%;
+  border-radius: 14px;
+  border: 1px solid rgb(0 0 0 / 0.12);
+  background: #fff;
+  color: rgb(0 0 0 / 0.8);
+  text-align: center;
+  padding: 0.8rem 1rem;
+  font-size: 0.94rem;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.event-card {
+  border-radius: 18px;
+  border: 1px solid rgb(0 0 0 / 0.1);
+  background: #fff;
+  padding: 1rem;
+  box-shadow: 0 6px 30px rgb(0 0 0 / 0.05);
+}
+
+.field-block {
+  display: grid;
+  gap: 0.38rem;
+}
+
+.field-label {
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: rgb(0 0 0 / 0.52);
+  font-weight: 700;
+}
+
+.field-input {
+  width: 100%;
+  border-radius: 12px;
+  border: 1px solid rgb(0 0 0 / 0.13);
+  background: #fff;
+  padding: 0.72rem 0.8rem;
+  font-size: 0.95rem;
+  color: rgb(0 0 0 / 0.84);
+}
+
+.field-input:focus {
+  outline: 2px solid rgb(0 0 0 / 0.16);
+  outline-offset: 1px;
 }

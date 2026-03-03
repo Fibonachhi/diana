@@ -9,8 +9,8 @@ const manrope = Manrope({
 });
 
 export const metadata: Metadata = {
-  title: "Diana Mini App",
-  description: "Telegram Mini App for Diana Listopad",
+  title: "Плюс Один Mini App",
+  description: "Клуб знакомств через реальные встречи",
 };
 
 export default function RootLayout({
