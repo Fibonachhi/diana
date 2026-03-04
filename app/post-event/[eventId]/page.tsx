@@ -1,4 +1,5 @@
 "use client";
+/* eslint-disable @next/next/no-img-element */
 
 import { useEffect, useMemo, useState } from "react";
 import { AnimatePresence, motion, useMotionValue, useTransform } from "framer-motion";
@@ -23,7 +24,7 @@ type DeckUser = {
 
 type SwipeType = "romantic" | "friendly" | "skip";
 
-const SWIPE_THRESHOLD = 95;
+const SWIPE_THRESHOLD = 64;
 
 function triggerHaptic(type: "light" | "success" | "warning") {
   const haptic = window.Telegram?.WebApp?.HapticFeedback;
@@ -46,6 +47,15 @@ function getTopPhoto(user?: DeckUser) {
   return user?.photos?.[0] ?? "/fallback-avatar.svg";
 }
 
+function getInitials(name: string) {
+  return name
+    .trim()
+    .split(/\s+/)
+    .slice(0, 2)
+    .map((part) => part[0]?.toUpperCase() ?? "")
+    .join("");
+}
+
 export default function PostEventSwipePage() {
   const router = useRouter();
   const params = useParams<{ eventId: string }>();
@@ -62,9 +72,9 @@ export default function PostEventSwipePage() {
   const [matchBanner, setMatchBanner] = useState<{ open: boolean; name: string }>({ open: false, name: "" });
 
   const x = useMotionValue(0);
-  const rotate = useTransform(x, [-220, 0, 220], [-14, 0, 14]);
-  const loveOpacity = useTransform(x, [20, 120], [0, 1]);
-  const friendOpacity = useTransform(x, [-120, -20], [1, 0]);
+  const rotate = useTransform(x, [-320, 0, 320], [-30, 0, 30]);
+  const loveOpacity = useTransform(x, [16, 130], [0, 1]);
+  const friendOpacity = useTransform(x, [-130, -16], [1, 0]);
 
   useEffect(() => {
     async function loadDeck() {
@@ -89,6 +99,14 @@ export default function PostEventSwipePage() {
     const candidate = target ?? current;
     if (!candidate || !telegramUserId || isSwiping) return;
     setIsSwiping(true);
+    const nextIndex = index + 1;
+    const currentId = candidate.id;
+
+    // Optimistic UI: immediately show next card to avoid freeze in Telegram webview.
+    setIndex(nextIndex);
+    setPhotoError(false);
+    setExiting(null);
+    x.set(0);
 
     try {
       const res = await fetch("/api/post-event/swipe", {
@@ -113,12 +131,8 @@ export default function PostEventSwipePage() {
           router.push("/matches");
         }, 1300);
       }
-
-      setIndex((value) => value + 1);
-      setPhotoError(false);
-      setExiting(null);
-      x.set(0);
     } finally {
+      logClient("info", "swipe_ui_advanced", { eventId, currentId, nextIndex });
       setIsSwiping(false);
     }
   }
@@ -132,15 +146,16 @@ export default function PostEventSwipePage() {
 
   function onDragEnd(offsetX: number) {
     if (!current || isSwiping) return;
+    const velocity = x.getVelocity();
 
-    if (offsetX > SWIPE_THRESHOLD) {
+    if (offsetX > SWIPE_THRESHOLD || velocity > 550) {
       setExiting("romantic");
       triggerHaptic("success");
       void handleSwipe("romantic", current);
       return;
     }
 
-    if (offsetX < -SWIPE_THRESHOLD) {
+    if (offsetX < -SWIPE_THRESHOLD || velocity < -550) {
       setExiting("friendly");
       triggerHaptic("light");
       void handleSwipe("friendly", current);
@@ -209,18 +224,19 @@ export default function PostEventSwipePage() {
         </div>
       ) : (
         <div className="screen-stack">
-          <AnimatePresence mode="wait">
+          <AnimatePresence mode="sync">
             <motion.div
               key={current.id}
               className={`swipe-card swipe-card-single liquidGlass ${isSwiping ? "swipe-card-busy" : ""}`}
               drag="x"
-              dragElastic={0.14}
+              dragElastic={0.36}
               dragConstraints={{ left: 0, right: 0 }}
               style={{ x, rotate }}
               initial={{ scale: 0.98, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
+              whileDrag={{ scale: 1.01 }}
               exit={exiting ? { x: exitByType[exiting].x, rotate: exitByType[exiting].rotate, opacity: 0 } : { opacity: 0 }}
-              transition={{ type: "spring", stiffness: 250, damping: 24 }}
+              transition={{ type: "spring", stiffness: 210, damping: 20 }}
               onDragEnd={(_, info) => onDragEnd(info.offset.x)}
             >
               <span className="glassEdge" />
@@ -228,6 +244,11 @@ export default function PostEventSwipePage() {
               <motion.div className="swipe-state swipe-friend" style={{ opacity: friendOpacity }}>🤝 дружба</motion.div>
 
               <div className="swipe-photo-wrap">
+                {photoError ? (
+                  <div className="swipe-photo-fallback">
+                    <span>{getInitials(current.name)}</span>
+                  </div>
+                ) : null}
                 <img
                   src={photoError ? "/fallback-avatar.svg" : getTopPhoto(current)}
                   alt={current.name}
