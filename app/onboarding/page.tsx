@@ -28,6 +28,7 @@ export default function OnboardingPage() {
 
   const step = steps[stepIndex];
   const progress = useMemo(() => Math.round(((stepIndex + 1) / steps.length) * 100), [stepIndex]);
+  const canFinish = Boolean(profile.age.trim() && profile.city.trim() && profile.interests.length > 0);
 
   function nextStep() {
     setStepIndex((current) => Math.min(current + 1, steps.length - 1));
@@ -44,9 +45,14 @@ export default function OnboardingPage() {
   }
 
   function finishOnboarding() {
-    if (!profile.age.trim() || !profile.city.trim() || profile.interests.length === 0) return;
+    if (!canFinish) return;
     localStorage.setItem(STORAGE_KEY, JSON.stringify(profile));
     router.push("/home");
+    window.setTimeout(() => {
+      if (window.location.pathname !== "/home") {
+        window.location.href = "/home";
+      }
+    }, 300);
   }
 
   return (
@@ -186,10 +192,13 @@ export default function OnboardingPage() {
               <LiquidGlassButton
                 variant="accent"
                 onClick={finishOnboarding}
-                disabled={!profile.age.trim() || !profile.city.trim() || profile.interests.length === 0}
+                disabled={!canFinish}
               >
                 Показать события
               </LiquidGlassButton>
+              {!canFinish ? (
+                <p className="mt-2 muted">Заполните возраст и минимум 1 интерес, чтобы открыть афишу.</p>
+              ) : null}
             </div>
           </LiquidGlassCard>
         ) : null}

@@ -16,6 +16,13 @@
   filter: brightness(1.06);
 }
 
+.button:disabled {
+  opacity: 0.48;
+  cursor: not-allowed;
+  transform: none;
+  filter: none;
+}
+
 .primary {
   color: #f8f8ff;
   background: linear-gradient(120deg, rgba(93, 108, 255, 0.84), rgba(177, 85, 255, 0.84));
