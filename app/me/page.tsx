@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { AppShell } from "@/src/components/app-shell";
 import { LiquidGlassCard } from "@/src/components/LiquidGlassCard";
+import { ResponsivePhoto } from "@/src/components/responsive-photo";
 import { useTelegramProfile } from "@/src/hooks/use-telegram-profile";
 
 type Profile = {
@@ -30,12 +31,7 @@ export default function MePage() {
     <AppShell title="Профиль" subtitle="Билеты, резерв, история и приватность">
       <div className="screen-stack">
         <LiquidGlassCard>
-          {profile?.photo_urls?.[0] ? (
-            <figure className="event-photo">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={profile.photo_urls[0]} alt={profile.first_name ?? "profile"} />
-            </figure>
-          ) : null}
+          {profile?.photo_urls?.[0] ? <ResponsivePhoto src={profile.photo_urls[0]} alt={profile.first_name ?? "profile"} /> : null}
           <h2 className="event-title">{profile?.first_name ?? "Профиль"}</h2>
           <p className="event-meta">@{profile?.username ?? "username"}</p>
           <p className="event-meta">{profile?.bio ?? "Добавьте bio в профиле."}</p>

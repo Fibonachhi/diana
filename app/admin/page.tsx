@@ -1,5 +1,6 @@
 import { LiquidGlassButton } from "@/src/components/LiquidGlassButton";
 import { LiquidGlassCard } from "@/src/components/LiquidGlassCard";
+import { ResponsivePhoto } from "@/src/components/responsive-photo";
 import { getEventsFromDb } from "@/src/lib/server-data";
 
 export default async function AdminPage() {
@@ -35,9 +36,8 @@ export default async function AdminPage() {
             <div className="mt-3 grid gap-2">
               {events.map((event) => (
                 <article key={event.id} className="rounded-xl border border-white/25 bg-white/10 p-3 text-sm text-slate-100">
-                  <div className="grid grid-cols-[88px_1fr] gap-3">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={event.coverImageUrl} alt={event.title} className="h-20 w-22 rounded-lg object-cover" />
+                  <div className="grid grid-cols-[110px_1fr] gap-3">
+                    <ResponsivePhoto src={event.coverImageUrl} alt={event.title} sizes="110px" />
                     <div>
                       <p className="font-semibold">{event.title}</p>
                       <p className="mt-1 text-slate-200/85">{event.city} · {event.startsAt}</p>

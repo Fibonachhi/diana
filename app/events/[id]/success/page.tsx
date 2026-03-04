@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { AppShell } from "@/src/components/app-shell";
 import { LiquidGlassButton } from "@/src/components/LiquidGlassButton";
 import { LiquidGlassCard } from "@/src/components/LiquidGlassCard";
+import { ResponsivePhoto } from "@/src/components/responsive-photo";
 import { getEventByIdFromDb } from "@/src/lib/server-data";
 
 type EventSuccessPageProps = {
@@ -19,10 +20,7 @@ export default async function EventSuccessPage({ params }: EventSuccessPageProps
     <AppShell title="Вы записаны" subtitle="Место закреплено за вами">
       <div className="screen-stack">
         <LiquidGlassCard>
-          <figure className="event-photo">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={event.venueImageUrl} alt={event.title} />
-          </figure>
+          <ResponsivePhoto src={event.venueImageUrl} alt={event.title} />
           <h2 className="event-title">{event.title}</h2>
           <p className="event-meta">Дата: {event.startsAt}</p>
           <p className="event-meta">Адрес: {event.location}</p>

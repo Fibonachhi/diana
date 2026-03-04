@@ -3,6 +3,7 @@ import { AppShell } from "@/src/components/app-shell";
 import { LiquidGlassButton } from "@/src/components/LiquidGlassButton";
 import { LiquidGlassCard } from "@/src/components/LiquidGlassCard";
 import { LiquidGlassPanel } from "@/src/components/LiquidGlassPanel";
+import { ResponsivePhoto } from "@/src/components/responsive-photo";
 import { getEventsFromDb } from "@/src/lib/server-data";
 
 export default async function HomePage() {
@@ -21,10 +22,7 @@ export default async function HomePage() {
         <div className="event-grid">
           {cityEvents.map((event) => (
             <LiquidGlassCard key={event.id}>
-              <figure className="event-photo">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={event.coverImageUrl} alt={event.title} />
-              </figure>
+              <ResponsivePhoto src={event.coverImageUrl} alt={event.title} />
               <h2 className="event-title">{event.title}</h2>
               <p className="event-meta">{event.description}</p>
               <div className="details-grid">

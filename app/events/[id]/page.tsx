@@ -4,6 +4,7 @@ import { AppShell } from "@/src/components/app-shell";
 import { LiquidGlassButton } from "@/src/components/LiquidGlassButton";
 import { LiquidGlassCard } from "@/src/components/LiquidGlassCard";
 import { LiquidGlassPanel } from "@/src/components/LiquidGlassPanel";
+import { ResponsivePhoto } from "@/src/components/responsive-photo";
 import { getEventByIdFromDb } from "@/src/lib/server-data";
 
 type EventDetailsPageProps = {
@@ -20,10 +21,7 @@ export default async function EventDetailsPage({ params }: EventDetailsPageProps
     <AppShell title="Детали встречи" subtitle={event.title}>
       <div className="screen-stack">
         <LiquidGlassCard>
-          <figure className="event-photo">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={event.coverImageUrl} alt={event.title} />
-          </figure>
+          <ResponsivePhoto src={event.coverImageUrl} alt={event.title} />
           <p className="eyebrow">Сценарий встречи</p>
           <h2 className="screen-title mt-2">Вечер знакомств через книги</h2>
           <p className="mt-3 muted">10 мужчин, 10 женщин, 3 раунда общения и мягкая модерация.</p>
@@ -37,10 +35,7 @@ export default async function EventDetailsPage({ params }: EventDetailsPageProps
         </LiquidGlassCard>
 
         <LiquidGlassPanel>
-          <figure className="event-photo">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={event.venueImageUrl} alt="Локация" />
-          </figure>
+          <ResponsivePhoto src={event.venueImageUrl} alt="Локация" />
           <p className="muted">Локация: {event.location}</p>
           <p className="mt-2 muted">Дресс-код: smart casual.</p>
         </LiquidGlassPanel>

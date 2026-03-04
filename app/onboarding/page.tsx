@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { LiquidGlassButton } from "@/src/components/LiquidGlassButton";
 import { LiquidGlassCard } from "@/src/components/LiquidGlassCard";
 import { LiquidGlassPanel } from "@/src/components/LiquidGlassPanel";
+import { ResponsivePhoto } from "@/src/components/responsive-photo";
 import { CITIES, INTERESTS } from "@/src/lib/mock-data";
 import { useTelegramProfile } from "@/src/hooks/use-telegram-profile";
 import { logClient } from "@/src/lib/logger";
@@ -89,10 +90,7 @@ export default function OnboardingPage() {
 
           {step === "welcome" ? (
             <LiquidGlassCard>
-              <figure className="event-photo">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={stepImages.welcome} alt="Онбординг" />
-              </figure>
+              <ResponsivePhoto src={stepImages.welcome} alt="Онбординг" priority />
               <h2 className="screen-title">Добро пожаловать в Плюс Один</h2>
               <p className="mt-3 muted">Клуб знакомств через реальные встречи. Сначала событие, потом взаимная симпатия.</p>
             </LiquidGlassCard>
@@ -100,10 +98,7 @@ export default function OnboardingPage() {
 
           {step === "how1" ? (
             <LiquidGlassCard>
-              <figure className="event-photo">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={stepImages.how1} alt="Выбор встречи" />
-              </figure>
+              <ResponsivePhoto src={stepImages.how1} alt="Выбор встречи" />
               <p className="eyebrow">Как это работает</p>
               <h2 className="screen-title mt-2">1. Вы выбираете встречу</h2>
               <p className="mt-2 muted">Живые мероприятия в вашем городе: книги, кино, прогулки и гастро.</p>
@@ -112,10 +107,7 @@ export default function OnboardingPage() {
 
           {step === "how2" ? (
             <LiquidGlassCard>
-              <figure className="event-photo">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={stepImages.how2} alt="Общение офлайн" />
-              </figure>
+              <ResponsivePhoto src={stepImages.how2} alt="Общение офлайн" />
               <p className="eyebrow">Как это работает</p>
               <h2 className="screen-title mt-2">2. Вы общаетесь офлайн</h2>
               <p className="mt-2 muted">Никаких чатов до встречи. Контакт, атмосфера и живые эмоции.</p>
@@ -124,10 +116,7 @@ export default function OnboardingPage() {
 
           {step === "how3" ? (
             <LiquidGlassCard>
-              <figure className="event-photo">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={stepImages.how3} alt="Симпатия после встречи" />
-              </figure>
+              <ResponsivePhoto src={stepImages.how3} alt="Симпатия после встречи" />
               <p className="eyebrow">Как это работает</p>
               <h2 className="screen-title mt-2">3. После встречи выбираете симпатию</h2>
               <p className="mt-2 muted">Взаимный выбор открывает контакт. Без давления и случайных диалогов.</p>

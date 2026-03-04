@@ -5,6 +5,7 @@ import Link from "next/link";
 import { AppShell } from "@/src/components/app-shell";
 import { LiquidGlassButton } from "@/src/components/LiquidGlassButton";
 import { LiquidGlassCard } from "@/src/components/LiquidGlassCard";
+import { ResponsivePhoto } from "@/src/components/responsive-photo";
 import { useTelegramProfile } from "@/src/hooks/use-telegram-profile";
 
 type MatchRow = {
@@ -55,10 +56,7 @@ export default function MatchesPage() {
         <div className="event-grid">
           {rows.map((row) => (
             <LiquidGlassCard key={row.id}>
-              <figure className="event-photo">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={row.partnerPhoto} alt={row.partnerName} />
-              </figure>
+              <ResponsivePhoto src={row.partnerPhoto} alt={row.partnerName} />
               <h2 className="event-title">{row.partnerName}</h2>
               <p className="event-meta">Тип: {row.type === "romantic" ? "романтический" : "дружеский"} мэтч</p>
               {row.partnerUsername ? <p className="event-meta">Контакт: @{row.partnerUsername}</p> : null}
