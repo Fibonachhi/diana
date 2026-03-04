@@ -3,8 +3,8 @@
 :root {
   --background: #060a1a;
   --foreground: #eef3ff;
-  --tabs-height: 94px;
-  --tabs-gap: 12px;
+  --tabs-height: 116px;
+  --tabs-gap: 20px;
 }
 
 @theme inline {
@@ -35,7 +35,7 @@ body {
   position: relative;
   min-height: var(--tg-viewport-height, 100dvh);
   width: 100%;
-  padding: 22px 20px calc(var(--tabs-height) + var(--tabs-gap) + env(safe-area-inset-bottom) + 26px);
+  padding: 22px 20px calc(var(--tabs-height) + var(--tabs-gap) + env(safe-area-inset-bottom) + 34px);
   overflow-x: clip;
 }
 
@@ -146,9 +146,23 @@ body {
 }
 
 .app-content {
-  margin-top: 14px;
+  margin-top: 10px;
   display: grid;
   gap: 12px;
+  padding-bottom: calc(var(--tabs-height) + var(--tabs-gap) + env(safe-area-inset-bottom) + 18px);
+}
+
+.build-badge {
+  width: max-content;
+  margin: 0 0 8px auto;
+  padding: 5px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  background: rgba(8, 18, 40, 0.52);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(220, 230, 255, 0.92);
 }
 
 .screen-stack {
@@ -276,7 +290,7 @@ body {
   left: max(10px, env(safe-area-inset-left));
   right: max(10px, env(safe-area-inset-right));
   margin: 0 auto;
-  bottom: calc(env(safe-area-inset-bottom) + 6px);
+  bottom: calc(env(safe-area-inset-bottom) + 2px);
   width: auto;
   max-width: 1240px;
   z-index: 40;
@@ -501,8 +515,9 @@ body {
 
 @media (max-width: 900px) {
   .app-root {
-    --tabs-height: 102px;
-    padding: 16px 14px calc(var(--tabs-height) + var(--tabs-gap) + env(safe-area-inset-bottom) + 18px);
+    --tabs-height: 124px;
+    --tabs-gap: 22px;
+    padding: 16px 14px calc(var(--tabs-height) + var(--tabs-gap) + env(safe-area-inset-bottom) + 28px);
   }
 
   .event-grid {
