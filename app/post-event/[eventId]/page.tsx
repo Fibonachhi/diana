@@ -58,6 +58,7 @@ export default function PostEventSwipePage() {
   const [index, setIndex] = useState(0);
   const [showGuide, setShowGuide] = useState(true);
   const [exiting, setExiting] = useState<SwipeType | null>(null);
+  const [isSwiping, setIsSwiping] = useState(false);
   const [matchBanner, setMatchBanner] = useState<{ open: boolean; name: string }>({ open: false, name: "" });
 
   const x = useMotionValue(0);
@@ -87,40 +88,45 @@ export default function PostEventSwipePage() {
 
   async function handleSwipe(type: SwipeType, target?: DeckUser) {
     const candidate = target ?? current;
-    if (!candidate || !telegramUserId) return;
+    if (!candidate || !telegramUserId || isSwiping) return;
+    setIsSwiping(true);
 
-    const res = await fetch("/api/post-event/swipe", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
+    try {
+      const res = await fetch("/api/post-event/swipe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          eventId,
+          telegramId: telegramUserId,
+          toUserId: candidate.id,
+          type,
+        }),
+      });
+
+      const body = (await res.json()) as { ok?: boolean; matchCreated?: boolean };
+
+      logClient("info", "swipe_action", {
         eventId,
-        telegramId: telegramUserId,
-        toUserId: candidate.id,
         type,
-      }),
-    });
+        toUserId: candidate.id,
+        matchCreated: Boolean(body.matchCreated),
+      });
 
-    const body = (await res.json()) as { ok?: boolean; matchCreated?: boolean };
+      if (body.matchCreated) {
+        triggerHaptic("success");
+        setMatchBanner({ open: true, name: candidate.name });
+        setTimeout(() => {
+          setMatchBanner({ open: false, name: "" });
+          router.push("/matches");
+        }, 1400);
+      }
 
-    logClient("info", "swipe_action", {
-      eventId,
-      type,
-      toUserId: candidate.id,
-      matchCreated: Boolean(body.matchCreated),
-    });
-
-    if (body.matchCreated) {
-      triggerHaptic("success");
-      setMatchBanner({ open: true, name: candidate.name });
-      setTimeout(() => {
-        setMatchBanner({ open: false, name: "" });
-        router.push("/matches");
-      }, 1400);
+      setIndex((value) => value + 1);
+      setExiting(null);
+      x.set(0);
+    } finally {
+      setIsSwiping(false);
     }
-
-    setIndex((value) => value + 1);
-    setExiting(null);
-    x.set(0);
   }
 
   function swipeWithButtons(type: SwipeType) {
@@ -131,7 +137,7 @@ export default function PostEventSwipePage() {
   }
 
   function onDragEnd(offsetX: number) {
-    if (!current) return;
+    if (!current || isSwiping) return;
 
     if (offsetX > SWIPE_THRESHOLD) {
       setExiting("romantic");
@@ -175,7 +181,13 @@ export default function PostEventSwipePage() {
         </div>
       </LiquidGlassCard>
 
-      <LiquidGlassButton variant="accent" onClick={() => setShowGuide(false)}>
+      <LiquidGlassButton
+        variant="accent"
+        onClick={() => {
+          setShowGuide(false);
+          window.scrollTo({ top: 0, behavior: "auto" });
+        }}
+      >
         Начать свайпы
       </LiquidGlassButton>
     </div>
@@ -206,7 +218,7 @@ export default function PostEventSwipePage() {
           {current ? (
             <motion.div
               key={current.id}
-              className="swipe-card liquidGlass"
+              className={`swipe-card liquidGlass ${isSwiping ? "swipe-card-busy" : ""}`}
               drag="x"
               dragElastic={0.18}
               dragConstraints={{ left: 0, right: 0 }}
@@ -257,14 +269,14 @@ export default function PostEventSwipePage() {
       <LiquidGlassPanel>
         <p className="muted">Свайпай карточку или используй кнопки.</p>
         <div className="swipe-actions-row">
-          <LiquidGlassButton variant="ghost" onClick={() => swipeWithButtons("friendly")}>
+          <LiquidGlassButton variant="ghost" onClick={() => swipeWithButtons("friendly")} disabled={isSwiping}>
             ← Дружба
           </LiquidGlassButton>
-          <LiquidGlassButton variant="accent" onClick={() => swipeWithButtons("romantic")}>
+          <LiquidGlassButton variant="accent" onClick={() => swipeWithButtons("romantic")} disabled={isSwiping}>
             Любовь →
           </LiquidGlassButton>
         </div>
-        <LiquidGlassButton className="mt-2" variant="ghost" onClick={() => swipeWithButtons("skip")}>
+        <LiquidGlassButton className="mt-2" variant="ghost" onClick={() => swipeWithButtons("skip")} disabled={isSwiping}>
           Пропустить
         </LiquidGlassButton>
       </LiquidGlassPanel>
