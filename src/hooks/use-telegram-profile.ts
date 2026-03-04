@@ -15,8 +15,12 @@ type TelegramWebApp = {
   initDataUnsafe?: {
     user?: TelegramUser;
   };
+  viewportHeight?: number;
+  viewportStableHeight?: number;
   ready?: () => void;
   expand?: () => void;
+  onEvent?: (eventType: "viewportChanged", handler: () => void) => void;
+  offEvent?: (eventType: "viewportChanged", handler: () => void) => void;
   HapticFeedback?: {
     impactOccurred?: (style: "light" | "medium" | "heavy" | "rigid" | "soft") => void;
     notificationOccurred?: (type: "error" | "success" | "warning") => void;

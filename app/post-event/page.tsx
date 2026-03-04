@@ -8,11 +8,20 @@ import { getEventsFromDb } from "@/src/lib/server-data";
 export default async function PostEventPage() {
   const events = await getEventsFromDb();
   const doneEvents = events.filter((event) => event.status === "finished");
+  const displayEvents = doneEvents.length > 0 ? doneEvents : events.slice(0, 1);
 
   return (
     <AppShell title="После мероприятия" subtitle="Здесь открываются участники уже завершённых встреч">
+      {doneEvents.length === 0 ? (
+        <LiquidGlassCard>
+          <h2 className="event-title">Свайпы готовы</h2>
+          <p className="event-meta">
+            В данных пока нет события со статусом <b>finished</b>, поэтому показываем демо-карточку для проверки механики.
+          </p>
+        </LiquidGlassCard>
+      ) : null}
       <div className="event-grid">
-        {doneEvents.map((event) => (
+        {displayEvents.map((event) => (
           <LiquidGlassCard key={event.id}>
             <ResponsivePhoto src={event.coverImageUrl} alt={event.title} />
             <h2 className="event-title">{event.title}</h2>

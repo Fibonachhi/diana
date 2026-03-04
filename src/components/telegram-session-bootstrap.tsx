@@ -9,10 +9,26 @@ export function TelegramSessionBootstrap() {
 
   useEffect(() => {
     const webApp = window.Telegram?.WebApp;
-    if (!webApp?.initData) return;
+    if (!webApp) return;
 
     webApp.ready?.();
     webApp.expand?.();
+
+    const applyViewportVars = () => {
+      const h = webApp.viewportStableHeight ?? webApp.viewportHeight;
+      if (h && Number.isFinite(h) && h > 0) {
+        document.documentElement.style.setProperty("--tg-viewport-height", `${h}px`);
+      }
+    };
+
+    applyViewportVars();
+    webApp.onEvent?.("viewportChanged", applyViewportVars);
+
+    if (!webApp.initData) {
+      return () => {
+        webApp.offEvent?.("viewportChanged", applyViewportVars);
+      };
+    }
 
     const initData = webApp.initData;
     if (localStorage.getItem("tg_init_data_hash") === initData) return;
@@ -37,6 +53,10 @@ export function TelegramSessionBootstrap() {
       .catch(() => {
         logClient("warn", "telegram_auth_bootstrap_failed", { telegramId: user?.id ?? null });
       });
+
+    return () => {
+      webApp.offEvent?.("viewportChanged", applyViewportVars);
+    };
   }, [user?.id]);
 
   return null;
