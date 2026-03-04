@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import { useTelegramProfile } from "@/src/hooks/use-telegram-profile";
+import { logClient } from "@/src/lib/logger";
 
 export function TelegramSessionBootstrap() {
   const { user } = useTelegramProfile();
@@ -16,6 +17,11 @@ export function TelegramSessionBootstrap() {
     const initData = webApp.initData;
     if (localStorage.getItem("tg_init_data_hash") === initData) return;
 
+    logClient("info", "telegram_auth_bootstrap_start", {
+      telegramId: user?.id ?? null,
+      initDataLength: initData.length,
+    });
+
     void fetch("/api/auth/telegram", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -25,10 +31,11 @@ export function TelegramSessionBootstrap() {
         const payload = (await res.json().catch(() => ({}))) as { ok?: boolean };
         if (res.ok && payload.ok) {
           localStorage.setItem("tg_init_data_hash", initData);
+          logClient("info", "telegram_auth_bootstrap_ok", { telegramId: user?.id ?? null });
         }
       })
       .catch(() => {
-        // ignore network/auth boot errors here; UI will still render.
+        logClient("warn", "telegram_auth_bootstrap_failed", { telegramId: user?.id ?? null });
       });
   }, [user?.id]);
 

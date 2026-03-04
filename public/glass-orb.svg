@@ -1,0 +1,17 @@
+<svg width="320" height="320" viewBox="0 0 320 320" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="g1" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(96 84) rotate(41) scale(212)">
+      <stop offset="0" stop-color="#C8D7FF" stop-opacity="0.92"/>
+      <stop offset="0.35" stop-color="#8CA4FF" stop-opacity="0.48"/>
+      <stop offset="1" stop-color="#7A3BFF" stop-opacity="0.08"/>
+    </radialGradient>
+    <filter id="blur" x="-60" y="-60" width="440" height="440" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="16"/>
+    </filter>
+  </defs>
+  <g filter="url(#blur)">
+    <circle cx="160" cy="160" r="126" fill="url(#g1)"/>
+    <path d="M73 126C90 78 138 46 188 52" stroke="white" stroke-opacity="0.65" stroke-width="10" stroke-linecap="round"/>
+    <circle cx="219" cy="118" r="18" fill="white" fill-opacity="0.42"/>
+  </g>
+</svg>

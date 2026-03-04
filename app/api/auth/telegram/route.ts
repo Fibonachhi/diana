@@ -2,6 +2,7 @@ import { randomUUID } from "crypto";
 import { NextResponse } from "next/server";
 import { createAdminSupabaseClient } from "@/src/lib/supabase/admin";
 import { verifyTelegramInitData } from "@/src/lib/telegram/verify";
+import { logServer } from "@/src/lib/logger";
 
 type TelegramAuthBody = {
   initData?: string;
@@ -25,6 +26,7 @@ export async function POST(request: Request) {
 
     const verified = verifyTelegramInitData(initData, botToken);
     const user = verified.user;
+    logServer("info", "telegram_auth_verified", { telegramId: user.id });
 
     const supabase = createAdminSupabaseClient();
 
@@ -49,12 +51,15 @@ export async function POST(request: Request) {
     );
 
     if (upsertError) {
+      logServer("error", "telegram_auth_upsert_failed", { telegramId: user.id, message: upsertError.message });
       return NextResponse.json({ ok: false, error: upsertError.message }, { status: 500 });
     }
 
+    logServer("info", "telegram_auth_ok", { telegramId: user.id, profileId });
     return NextResponse.json({ ok: true, profileId });
   } catch (error) {
     const message = error instanceof Error ? error.message : "Auth error";
+    logServer("warn", "telegram_auth_failed", { message });
     return NextResponse.json({ ok: false, error: message }, { status: 401 });
   }
 }

@@ -2,17 +2,24 @@ import Link from "next/link";
 import { AppShell } from "@/src/components/app-shell";
 import { LiquidGlassButton } from "@/src/components/LiquidGlassButton";
 import { LiquidGlassCard } from "@/src/components/LiquidGlassCard";
-import { EVENTS } from "@/src/lib/mock-data";
+import { getEventsFromDb } from "@/src/lib/server-data";
 
-export default function PostEventPage() {
+export default async function PostEventPage() {
+  const events = await getEventsFromDb();
+  const doneEvents = events.filter((event) => event.status === "finished");
+
   return (
-    <AppShell title="После мероприятия" subtitle="Участники встречи становятся доступны после статуса finished">
+    <AppShell title="После мероприятия" subtitle="Здесь открываются участники уже завершённых встреч">
       <div className="event-grid">
-        {EVENTS.map((event) => (
+        {doneEvents.map((event) => (
           <LiquidGlassCard key={event.id}>
+            <figure className="event-photo">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={event.coverImageUrl} alt={event.title} />
+            </figure>
             <h2 className="event-title">{event.title}</h2>
             <p className="event-meta">{event.startsAt}</p>
-            <p className="event-meta">Окно симпатий откроется после завершения встречи админом.</p>
+            <p className="event-meta">matching_open: {event.matchingOpen ? "включено" : "выключено"}</p>
             <Link href={`/post-event/${event.id}`} className="mt-4 block">
               <LiquidGlassButton variant="accent">Участники встречи</LiquidGlassButton>
             </Link>
