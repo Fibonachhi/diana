@@ -1,26 +1,28 @@
 import Link from "next/link";
 import { AppShell } from "@/src/components/app-shell";
+import { LiquidGlassButton } from "@/src/components/LiquidGlassButton";
+import { LiquidGlassCard } from "@/src/components/LiquidGlassCard";
 import { EVENTS } from "@/src/lib/mock-data";
 
 export default function EventsPage() {
   return (
-    <AppShell title="Афиша встреч" subtitle="Выберите формат и мероприятие в вашем городе">
-      <div className="space-y-3">
+    <AppShell title="Афиша" subtitle="Выбирайте формат и день встречи">
+      <div className="event-grid">
         {EVENTS.map((event) => (
-          <article key={event.id} className="event-card">
-            <p className="text-xs uppercase tracking-[0.14em] text-black/45">{event.city}</p>
-            <h3 className="mt-2 text-lg font-semibold leading-tight">{event.title}</h3>
-            <p className="mt-2 text-sm text-black/75">{event.shortDescription}</p>
-            <div className="mt-3 grid grid-cols-2 gap-2 text-sm text-black/65">
-              <p>{event.startsAt}</p>
-              <p className="text-right">{event.priceLabel}</p>
-              <p>Возраст: {event.ageLabel}</p>
-              <p className="text-right">Осталось мест: {event.spotsLeft}</p>
+          <LiquidGlassCard key={event.id}>
+            <p className="eyebrow">{event.city}</p>
+            <h2 className="event-title mt-2">{event.title}</h2>
+            <p className="event-meta">{event.shortDescription}</p>
+            <div className="details-grid">
+              <p className="details-pill">{event.startsAt}</p>
+              <p className="details-pill">{event.priceLabel}</p>
+              <p className="details-pill">Возраст: {event.ageLabel}</p>
+              <p className="details-pill">Мест: {event.spotsLeft}</p>
             </div>
-            <Link href={`/events/${event.id}`} className="primary-btn mt-4">
-              Пойти
+            <Link href={`/events/${event.id}`} className="mt-4 block">
+              <LiquidGlassButton variant="accent">Пойти</LiquidGlassButton>
             </Link>
-          </article>
+          </LiquidGlassCard>
         ))}
       </div>
     </AppShell>

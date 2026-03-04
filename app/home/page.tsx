@@ -1,31 +1,42 @@
 import Link from "next/link";
 import { AppShell } from "@/src/components/app-shell";
+import { LiquidGlassButton } from "@/src/components/LiquidGlassButton";
+import { LiquidGlassCard } from "@/src/components/LiquidGlassCard";
+import { LiquidGlassPanel } from "@/src/components/LiquidGlassPanel";
 import { EVENTS } from "@/src/lib/mock-data";
 
 export default function HomePage() {
-  const primaryCity = "Москва";
-  const cityEvents = EVENTS.filter((event) => event.city === primaryCity);
+  const city = "Москва";
+  const cityEvents = EVENTS.filter((event) => event.city === city);
 
   return (
-    <AppShell title="Ближайшие встречи" subtitle={`Город: ${primaryCity}`}>
-      <div className="space-y-3">
-        {cityEvents.map((event) => (
-          <article key={event.id} className="event-card">
-            <h3 className="text-lg font-semibold leading-tight">{event.title}</h3>
-            <p className="mt-2 text-sm text-black/70">{event.startsAt}</p>
-            <p className="mt-1 text-sm text-black/65">Возраст: {event.ageLabel}</p>
-            <p className="mt-1 text-sm text-black/65">Осталось мест: {event.spotsLeft}</p>
-            <div className="mt-4 flex items-center justify-between">
-              <span className="text-base font-semibold">{event.priceLabel}</span>
-              <Link href={`/events/${event.id}`} className="primary-btn inline-flex w-auto px-4 py-2 text-sm">
-                Пойти
-              </Link>
-            </div>
-          </article>
-        ))}
+    <AppShell title="Встречи в городе" subtitle={`Город: ${city}`}>
+      <div className="screen-stack">
+        <LiquidGlassPanel>
+          <p className="muted">Главный экран</p>
+          <p className="mt-2 muted">Подборка ближайших встреч, где можно познакомиться через общий контекст.</p>
+        </LiquidGlassPanel>
 
-        <Link href="/events" className="secondary-btn">
-          Посмотреть все события
+        <div className="event-grid">
+          {cityEvents.map((event) => (
+            <LiquidGlassCard key={event.id}>
+              <h2 className="event-title">{event.title}</h2>
+              <p className="event-meta">{event.shortDescription}</p>
+              <div className="details-grid">
+                <p className="details-pill">{event.startsAt}</p>
+                <p className="details-pill">Возраст: {event.ageLabel}</p>
+                <p className="details-pill">Осталось мест: {event.spotsLeft}</p>
+                <p className="details-pill">{event.priceLabel}</p>
+              </div>
+              <Link href={`/events/${event.id}`} className="mt-4 block">
+                <LiquidGlassButton variant="accent">Пойти</LiquidGlassButton>
+              </Link>
+            </LiquidGlassCard>
+          ))}
+        </div>
+
+        <Link href="/events">
+          <LiquidGlassButton variant="ghost">Показать всю афишу</LiquidGlassButton>
         </Link>
       </div>
     </AppShell>

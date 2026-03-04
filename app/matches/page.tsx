@@ -1,19 +1,22 @@
-import { AppShell } from "@/src/components/app-shell";
 import Link from "next/link";
+import { AppShell } from "@/src/components/app-shell";
+import { LiquidGlassButton } from "@/src/components/LiquidGlassButton";
+import { LiquidGlassCard } from "@/src/components/LiquidGlassCard";
 
 export default function MatchesPage() {
   return (
-    <AppShell title="У вас взаимная симпатия" subtitle="Контакт открывается только при взаимном выборе">
-      <div className="space-y-3">
-        <section className="rounded-2xl bg-black/5 p-4 text-sm text-black/80">
-          <p className="font-semibold">Анна, 28</p>
-          <p className="mt-2">Тип мэтча: романтическая симпатия</p>
-        </section>
+    <AppShell title="Взаимная симпатия" subtitle="Контакт открывается только при взаимном выборе">
+      <div className="screen-stack">
+        <LiquidGlassCard>
+          <h2 className="screen-title">У вас взаимная симпатия</h2>
+          <p className="event-meta">Анна, 28 · романтический мэтч</p>
+          <div className="mt-4">
+            <LiquidGlassButton variant="accent">Открыть контакт</LiquidGlassButton>
+          </div>
+        </LiquidGlassCard>
 
-        <button className="primary-btn">Открыть контакт</button>
-
-        <Link href="/post-event" className="secondary-btn">
-          Вернуться к участникам
+        <Link href="/post-event">
+          <LiquidGlassButton variant="ghost">Вернуться к участникам встречи</LiquidGlassButton>
         </Link>
       </div>
     </AppShell>

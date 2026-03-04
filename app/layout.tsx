@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Manrope } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
+import "@/src/styles/glass.css";
+import { TelegramSessionBootstrap } from "@/src/components/telegram-session-bootstrap";
 
 const manrope = Manrope({
   variable: "--font-manrope",
@@ -22,6 +24,7 @@ export default function RootLayout({
     <html lang="ru">
       <body className={`${manrope.variable} antialiased`}>
         <Script src="https://telegram.org/js/telegram-web-app.js" strategy="beforeInteractive" />
+        <TelegramSessionBootstrap />
         {children}
       </body>
     </html>

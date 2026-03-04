@@ -1,0 +1,68 @@
+.liquidGlass {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(22px) saturate(180%);
+  -webkit-backdrop-filter: blur(22px) saturate(180%);
+  border-radius: 22px;
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  box-shadow:
+    0 20px 50px rgba(4, 8, 24, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.34);
+  position: relative;
+  overflow: hidden;
+}
+
+.liquidGlass::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    130deg,
+    rgba(255, 255, 255, 0.28),
+    rgba(255, 255, 255, 0.08) 40%,
+    rgba(255, 255, 255, 0.02)
+  );
+  pointer-events: none;
+}
+
+.liquidGlass::after {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  background: radial-gradient(circle at 24% 16%, rgba(112, 123, 255, 0.42), transparent 60%);
+  filter: blur(24px);
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  pointer-events: none;
+}
+
+.liquidGlassHover {
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease,
+    border-color 0.3s ease;
+}
+
+.liquidGlassHover:hover {
+  transform: translateY(-4px);
+  border-color: rgba(255, 255, 255, 0.4);
+  box-shadow:
+    0 30px 70px rgba(0, 0, 0, 0.58),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+
+.liquidGlassHover:hover::after {
+  opacity: 1;
+}
+
+.glassEdge {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: xor;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  padding: 1px;
+  pointer-events: none;
+}

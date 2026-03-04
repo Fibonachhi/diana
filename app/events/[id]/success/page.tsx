@@ -1,5 +1,8 @@
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { AppShell } from "@/src/components/app-shell";
+import { LiquidGlassButton } from "@/src/components/LiquidGlassButton";
+import { LiquidGlassCard } from "@/src/components/LiquidGlassCard";
 import { EVENTS } from "@/src/lib/mock-data";
 
 type EventSuccessPageProps = {
@@ -10,23 +13,26 @@ export default async function EventSuccessPage({ params }: EventSuccessPageProps
   const { id } = await params;
   const event = EVENTS.find((item) => item.id === id);
 
-  if (!event) {
-    notFound();
-  }
+  if (!event) notFound();
 
   return (
-    <AppShell title="Вы записаны на встречу" subtitle="Оплата подтверждена, место за вами закреплено">
-      <div className="space-y-3 text-sm text-black/80">
-        <section className="rounded-2xl bg-black/5 p-4">
-          <p className="font-semibold">{event.title}</p>
-          <p className="mt-2">Дата: {event.startsAt}</p>
-          <p className="mt-1">Адрес: {event.address}</p>
-          <p className="mt-1">Дресс-код: {event.dressCode}</p>
-        </section>
+    <AppShell title="Вы записаны" subtitle="Место закреплено за вами">
+      <div className="screen-stack">
+        <LiquidGlassCard>
+          <h2 className="event-title">{event.title}</h2>
+          <p className="event-meta">Дата: {event.startsAt}</p>
+          <p className="event-meta">Адрес: {event.address}</p>
+          <p className="event-meta">Дресс-код: {event.dressCode}</p>
+        </LiquidGlassCard>
 
-        <section className="rounded-2xl bg-black/5 p-4">
-          <p>После завершения мероприятия откроется раздел «Участники встречи» для взаимных симпатий.</p>
-        </section>
+        <LiquidGlassCard>
+          <h2 className="event-title">Что дальше</h2>
+          <p className="event-meta">После завершения встречи откроется раздел «Участники встречи» со взаимными симпатиями.</p>
+        </LiquidGlassCard>
+
+        <Link href="/post-event">
+          <LiquidGlassButton>Перейти в раздел после встречи</LiquidGlassButton>
+        </Link>
       </div>
     </AppShell>
   );

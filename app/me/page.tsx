@@ -1,29 +1,29 @@
 import { AppShell } from "@/src/components/app-shell";
+import { LiquidGlassCard } from "@/src/components/LiquidGlassCard";
 
 export default function MePage() {
   return (
-    <AppShell title="Мой профиль" subtitle="Профиль, билеты, резерв, история и приватность контактов">
-      <div className="space-y-3 text-sm text-black/80">
-        <section className="rounded-2xl bg-black/5 p-4">
-          <p className="font-semibold">Профиль</p>
-          <p className="mt-1">Имя, возраст, город, фото, bio и интересы.</p>
-          <p className="mt-1">Настройка: показывать username только после мэтча.</p>
-        </section>
+    <AppShell title="Профиль" subtitle="Билеты, резерв, история и приватность">
+      <div className="screen-stack">
+        <LiquidGlassCard>
+          <h2 className="event-title">Мой профиль</h2>
+          <p className="event-meta">Имя, город, возраст, интересы, настройки показа username после мэтча.</p>
+        </LiquidGlassCard>
 
-        <section className="rounded-2xl bg-black/5 p-4">
-          <p className="font-semibold">Активные записи</p>
-          <p className="mt-1">Книжный клуб знакомств · 14 марта · статус: paid.</p>
-        </section>
+        <LiquidGlassCard>
+          <h2 className="event-title">Активные записи</h2>
+          <p className="event-meta">Книжный клуб знакомств · 14 марта · статус: paid.</p>
+        </LiquidGlassCard>
 
-        <section className="rounded-2xl bg-black/5 p-4">
-          <p className="font-semibold">Резерв</p>
-          <p className="mt-1">Кино-встреча · место 3 в листе ожидания.</p>
-        </section>
+        <LiquidGlassCard>
+          <h2 className="event-title">Резерв</h2>
+          <p className="event-meta">Кино-встреча · оффер откроется при освобождении места.</p>
+        </LiquidGlassCard>
 
-        <section className="rounded-2xl bg-black/5 p-4">
-          <p className="font-semibold">История посещений</p>
-          <p className="mt-1">2 завершённые встречи, 1 открытый пост-ивент мэтчинг.</p>
-        </section>
+        <LiquidGlassCard>
+          <h2 className="event-title">История</h2>
+          <p className="event-meta">2 завершённые встречи, 1 открытый пост-ивент мэтчинг.</p>
+        </LiquidGlassCard>
       </div>
     </AppShell>
   );

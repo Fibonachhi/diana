@@ -1,10 +1,13 @@
 "use client";
 
-import { AppShell } from "@/src/components/app-shell";
-import { EVENTS, PARTICIPANTS } from "@/src/lib/mock-data";
+import { useMemo, useState } from "react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
-import { useMemo, useState } from "react";
+import { AppShell } from "@/src/components/app-shell";
+import { LiquidGlassButton } from "@/src/components/LiquidGlassButton";
+import { LiquidGlassCard } from "@/src/components/LiquidGlassCard";
+import { LiquidGlassPanel } from "@/src/components/LiquidGlassPanel";
+import { EVENTS, PARTICIPANTS } from "@/src/lib/mock-data";
 
 type SwipeType = "romantic" | "friendly" | "skip";
 
@@ -18,7 +21,6 @@ export default function PostEventSwipePage() {
   const [index, setIndex] = useState(0);
 
   const current = deck[index];
-  const isDone = index >= deck.length;
 
   function handleSwipe(type: SwipeType) {
     if (!current) return;
@@ -38,47 +40,47 @@ export default function PostEventSwipePage() {
 
   if (!event) {
     return (
-      <AppShell title="После мероприятия" subtitle="Событие не найдено">
-        <p className="text-sm text-black/70">Проверьте ссылку на событие.</p>
+      <AppShell title="Участники встречи" subtitle="Событие не найдено">
+        <LiquidGlassCard>
+          <p className="muted">Проверьте ссылку события.</p>
+        </LiquidGlassCard>
+      </AppShell>
+    );
+  }
+
+  if (!current) {
+    return (
+      <AppShell title="Участники встречи" subtitle={event.title}>
+        <LiquidGlassPanel>
+          <p className="screen-title">Вы всех просмотрели</p>
+          <p className="mt-2 muted">Новые карточки появятся, если кто-то завершит профиль позже.</p>
+          <Link href="/matches" className="mt-4 block">
+            <LiquidGlassButton variant="accent">Перейти к мэтчам</LiquidGlassButton>
+          </Link>
+        </LiquidGlassPanel>
       </AppShell>
     );
   }
 
   return (
     <AppShell title="Участники встречи" subtitle={event.title}>
-      {isDone ? (
-        <div className="space-y-4">
-          <section className="rounded-2xl bg-black/5 p-4 text-sm text-black/75">
-            Вы всех просмотрели. Новые карточки появятся, если кто-то завершит профиль позже.
-          </section>
-          <Link href="/matches" className="primary-btn">
-            Перейти к мэтчам
-          </Link>
-        </div>
-      ) : (
-        <div className="space-y-4">
-          <section className="rounded-3xl border border-black/10 bg-white p-5 shadow">
-            <p className="text-xs uppercase tracking-[0.14em] text-black/45">Карточка {index + 1}</p>
-            <h2 className="mt-2 text-2xl font-semibold">
-              {current.name}, {current.age}
-            </h2>
-            <p className="mt-2 text-sm text-black/70">{current.job}</p>
-            <p className="mt-2 text-sm text-black/75">{current.bio}</p>
-          </section>
+      <div className="screen-stack">
+        <LiquidGlassCard>
+          <p className="eyebrow">Карточка {index + 1}</p>
+          <h2 className="screen-title mt-2">{current.name}, {current.age}</h2>
+          <p className="event-meta">{current.job}</p>
+          <p className="mt-2 muted">{current.bio}</p>
+        </LiquidGlassCard>
 
-          <div className="grid grid-cols-1 gap-2">
-            <button className="secondary-btn" onClick={() => handleSwipe("skip")}>
-              Пропустить
-            </button>
-            <button className="primary-btn" onClick={() => handleSwipe("romantic")}>
-              ❤️ Романтическая симпатия
-            </button>
-            <button className="primary-btn bg-emerald-600 hover:bg-emerald-500" onClick={() => handleSwipe("friendly")}>
-              🤝 Дружеская симпатия
-            </button>
+        <LiquidGlassPanel>
+          <p className="muted">После реальной встречи можно выбрать только 1 из 3 реакций:</p>
+          <div className="mt-3 grid gap-2">
+            <LiquidGlassButton variant="ghost" onClick={() => handleSwipe("skip")}>Пропустить</LiquidGlassButton>
+            <LiquidGlassButton onClick={() => handleSwipe("romantic")}>❤️ Романтическая симпатия</LiquidGlassButton>
+            <LiquidGlassButton variant="accent" onClick={() => handleSwipe("friendly")}>🤝 Дружеская симпатия</LiquidGlassButton>
           </div>
-        </div>
-      )}
+        </LiquidGlassPanel>
+      </div>
     </AppShell>
   );
 }

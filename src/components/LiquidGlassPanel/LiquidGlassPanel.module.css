@@ -1,0 +1,8 @@
+.panel {
+  padding: 14px;
+}
+
+.content {
+  position: relative;
+  z-index: 2;
+}
