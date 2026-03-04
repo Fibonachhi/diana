@@ -378,16 +378,7 @@ body {
   gap: 14px;
 }
 
-.swipe-deck-wrap {
-  position: relative;
-  height: min(64vh, 520px);
-  min-height: 430px;
-}
-
-.swipe-card,
-.swipe-card-back {
-  position: absolute;
-  inset: 0;
+.swipe-card {
   border-radius: 22px;
 }
 
@@ -405,20 +396,22 @@ body {
   pointer-events: none;
 }
 
-.swipe-card-back {
-  z-index: 2;
-  transform: translateY(9px) scale(0.98);
-  opacity: 0.72;
+.swipe-card-single {
+  position: relative;
+  overflow: hidden;
 }
 
 .swipe-photo-wrap {
   position: relative;
-  height: 350px;
+  height: min(50vh, 420px);
+  min-height: 280px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.22);
   overflow: hidden;
 }
 
 .swipe-photo-img {
+  width: 100%;
+  height: 100%;
   object-fit: cover;
 }
 
@@ -532,12 +525,8 @@ body {
     grid-template-columns: 1fr;
   }
 
-  .swipe-deck-wrap {
-    min-height: 400px;
-    height: min(56vh, 480px);
-  }
-
   .swipe-photo-wrap {
-    height: 310px;
+    height: min(44vh, 380px);
+    min-height: 250px;
   }
 }
