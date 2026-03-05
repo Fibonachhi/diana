@@ -2,7 +2,7 @@
 /* eslint-disable @next/next/no-img-element */
 
 import { useEffect, useMemo, useState } from "react";
-import { AnimatePresence, motion, useMotionValue, useTransform } from "framer-motion";
+import { AnimatePresence, animate, motion, useMotionValue, useTransform } from "framer-motion";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { AppShell } from "@/src/components/app-shell";
@@ -66,7 +66,6 @@ export default function PostEventSwipePage() {
   const [loading, setLoading] = useState(true);
   const [index, setIndex] = useState(0);
   const [showGuide, setShowGuide] = useState(true);
-  const [exiting, setExiting] = useState<SwipeType | null>(null);
   const [isSwiping, setIsSwiping] = useState(false);
   const [photoLoaded, setPhotoLoaded] = useState(false);
   const [photoError, setPhotoError] = useState(false);
@@ -107,7 +106,6 @@ export default function PostEventSwipePage() {
     setIndex(nextIndex);
     setPhotoLoaded(false);
     setPhotoError(false);
-    setExiting(null);
     x.set(0);
 
     try {
@@ -148,9 +146,14 @@ export default function PostEventSwipePage() {
 
   function swipeWithButtons(type: SwipeType) {
     if (!current || isSwiping) return;
-    setExiting(type);
     triggerHaptic(type === "romantic" ? "success" : type === "friendly" ? "light" : "warning");
-    void handleSwipe(type, current);
+    const dir = type === "romantic" ? 1 : type === "friendly" ? -1 : 0;
+    if (dir !== 0) {
+      animate(x, dir * window.innerWidth * 1.05, { duration: 0.18, ease: "easeOut" });
+    }
+    window.setTimeout(() => {
+      void handleSwipe(type, current);
+    }, 120);
   }
 
   function onDragEnd(offsetX: number) {
@@ -158,27 +161,25 @@ export default function PostEventSwipePage() {
     const velocity = x.getVelocity();
 
     if (offsetX > SWIPE_THRESHOLD || velocity > 550) {
-      setExiting("romantic");
       triggerHaptic("success");
-      void handleSwipe("romantic", current);
+      animate(x, window.innerWidth * 1.05, { duration: 0.18, ease: "easeOut" });
+      window.setTimeout(() => {
+        void handleSwipe("romantic", current);
+      }, 120);
       return;
     }
 
     if (offsetX < -SWIPE_THRESHOLD || velocity < -550) {
-      setExiting("friendly");
       triggerHaptic("light");
-      void handleSwipe("friendly", current);
+      animate(x, -window.innerWidth * 1.05, { duration: 0.18, ease: "easeOut" });
+      window.setTimeout(() => {
+        void handleSwipe("friendly", current);
+      }, 120);
       return;
     }
 
-    x.set(0);
+    animate(x, 0, { type: "spring", stiffness: 260, damping: 22 });
   }
-
-  const exitByType: Record<SwipeType, { x: number; rotate: number }> = {
-    romantic: { x: 420, rotate: 22 },
-    friendly: { x: -420, rotate: -22 },
-    skip: { x: 0, rotate: 0 },
-  };
 
   return (
     <AppShell title="Участники встречи" subtitle="После события выбирайте симпатию">
@@ -232,8 +233,8 @@ export default function PostEventSwipePage() {
           </LiquidGlassButton>
         </div>
       ) : (
-        <div className="screen-stack">
-          <AnimatePresence mode="sync">
+        <div className="swipe-stage">
+          <div className="swipe-card-host">
             <motion.div
               key={current.id}
               className={`swipe-card swipe-card-single liquidGlass ${isSwiping ? "swipe-card-busy" : ""}`}
@@ -244,7 +245,6 @@ export default function PostEventSwipePage() {
               initial={{ scale: 0.98, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               whileDrag={{ scale: 1.01 }}
-              exit={exiting ? { x: exitByType[exiting].x, rotate: exitByType[exiting].rotate, opacity: 0 } : { opacity: 0 }}
               transition={{ type: "spring", stiffness: 210, damping: 20 }}
               onDragEnd={(_, info) => onDragEnd(info.offset.x)}
             >
@@ -276,7 +276,7 @@ export default function PostEventSwipePage() {
                 <p className="event-meta">{current.bio ?? "Информация появится позже."}</p>
               </div>
             </motion.div>
-          </AnimatePresence>
+          </div>
 
           <LiquidGlassPanel>
             <p className="muted">Свайпай карточку или используй кнопки.</p>
