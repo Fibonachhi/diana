@@ -2,7 +2,7 @@
 /* eslint-disable @next/next/no-img-element */
 
 import { useEffect, useMemo, useState } from "react";
-import { AnimatePresence, animate, motion, useMotionValue, useTransform } from "framer-motion";
+import { AnimatePresence, motion, useMotionValue, useTransform } from "framer-motion";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { AppShell } from "@/src/components/app-shell";
@@ -99,11 +99,10 @@ export default function PostEventSwipePage() {
     const candidate = target ?? current;
     if (!candidate || !telegramUserId || isSwiping) return;
     setIsSwiping(true);
-    const nextIndex = index + 1;
     const currentId = candidate.id;
 
     // Optimistic UI: immediately show next card to avoid freeze in Telegram webview.
-    setIndex(nextIndex);
+    setIndex((value) => value + 1);
     setPhotoLoaded(false);
     setPhotoError(false);
     x.set(0);
@@ -139,7 +138,7 @@ export default function PostEventSwipePage() {
     } catch (error) {
       logClient("warn", "swipe_action_failed", { eventId, type, message: String(error) });
     } finally {
-      logClient("info", "swipe_ui_advanced", { eventId, currentId, nextIndex });
+      logClient("info", "swipe_ui_advanced", { eventId, currentId });
       setIsSwiping(false);
     }
   }
@@ -147,13 +146,7 @@ export default function PostEventSwipePage() {
   function swipeWithButtons(type: SwipeType) {
     if (!current || isSwiping) return;
     triggerHaptic(type === "romantic" ? "success" : type === "friendly" ? "light" : "warning");
-    const dir = type === "romantic" ? 1 : type === "friendly" ? -1 : 0;
-    if (dir !== 0) {
-      animate(x, dir * window.innerWidth * 1.05, { duration: 0.18, ease: "easeOut" });
-    }
-    window.setTimeout(() => {
-      void handleSwipe(type, current);
-    }, 120);
+    void handleSwipe(type, current);
   }
 
   function onDragEnd(offsetX: number) {
@@ -162,23 +155,16 @@ export default function PostEventSwipePage() {
 
     if (offsetX > SWIPE_THRESHOLD || velocity > 550) {
       triggerHaptic("success");
-      animate(x, window.innerWidth * 1.05, { duration: 0.18, ease: "easeOut" });
-      window.setTimeout(() => {
-        void handleSwipe("romantic", current);
-      }, 120);
+      void handleSwipe("romantic", current);
       return;
     }
 
     if (offsetX < -SWIPE_THRESHOLD || velocity < -550) {
       triggerHaptic("light");
-      animate(x, -window.innerWidth * 1.05, { duration: 0.18, ease: "easeOut" });
-      window.setTimeout(() => {
-        void handleSwipe("friendly", current);
-      }, 120);
+      void handleSwipe("friendly", current);
       return;
     }
-
-    animate(x, 0, { type: "spring", stiffness: 260, damping: 22 });
+    x.set(0);
   }
 
   return (
@@ -239,7 +225,7 @@ export default function PostEventSwipePage() {
               key={current.id}
               className={`swipe-card swipe-card-single liquidGlass ${isSwiping ? "swipe-card-busy" : ""}`}
               drag="x"
-              dragElastic={0.56}
+              dragElastic={0.32}
               dragMomentum={false}
               style={{ x, rotate }}
               initial={{ scale: 0.98, opacity: 0 }}
