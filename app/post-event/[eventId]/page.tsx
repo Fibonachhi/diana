@@ -68,6 +68,7 @@ export default function PostEventSwipePage() {
   const [showGuide, setShowGuide] = useState(true);
   const [exiting, setExiting] = useState<SwipeType | null>(null);
   const [isSwiping, setIsSwiping] = useState(false);
+  const [photoLoaded, setPhotoLoaded] = useState(false);
   const [photoError, setPhotoError] = useState(false);
   const [matchBanner, setMatchBanner] = useState<{ open: boolean; name: string }>({ open: false, name: "" });
 
@@ -104,14 +105,19 @@ export default function PostEventSwipePage() {
 
     // Optimistic UI: immediately show next card to avoid freeze in Telegram webview.
     setIndex(nextIndex);
+    setPhotoLoaded(false);
     setPhotoError(false);
     setExiting(null);
     x.set(0);
 
     try {
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 4500);
+
       const res = await fetch("/api/post-event/swipe", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        signal: controller.signal,
         body: JSON.stringify({
           eventId,
           telegramId: telegramUserId,
@@ -119,6 +125,7 @@ export default function PostEventSwipePage() {
           type,
         }),
       });
+      clearTimeout(timeout);
 
       const body = (await res.json()) as { matchCreated?: boolean };
       logClient("info", "swipe_action", { eventId, type, toUserId: candidate.id, matchCreated: Boolean(body.matchCreated) });
@@ -131,6 +138,8 @@ export default function PostEventSwipePage() {
           router.push("/matches");
         }, 1300);
       }
+    } catch (error) {
+      logClient("warn", "swipe_action_failed", { eventId, type, message: String(error) });
     } finally {
       logClient("info", "swipe_ui_advanced", { eventId, currentId, nextIndex });
       setIsSwiping(false);
@@ -229,8 +238,8 @@ export default function PostEventSwipePage() {
               key={current.id}
               className={`swipe-card swipe-card-single liquidGlass ${isSwiping ? "swipe-card-busy" : ""}`}
               drag="x"
-              dragElastic={0.36}
-              dragConstraints={{ left: 0, right: 0 }}
+              dragElastic={0.56}
+              dragMomentum={false}
               style={{ x, rotate }}
               initial={{ scale: 0.98, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
@@ -244,18 +253,20 @@ export default function PostEventSwipePage() {
               <motion.div className="swipe-state swipe-friend" style={{ opacity: friendOpacity }}>🤝 дружба</motion.div>
 
               <div className="swipe-photo-wrap">
-                {photoError ? (
-                  <div className="swipe-photo-fallback">
-                    <span>{getInitials(current.name)}</span>
-                  </div>
-                ) : null}
+                <div className="swipe-photo-fallback">
+                  <span>{getInitials(current.name)}</span>
+                </div>
                 <img
                   src={photoError ? "/fallback-avatar.svg" : getTopPhoto(current)}
                   alt={current.name}
-                  className="swipe-photo-img"
+                  className={`swipe-photo-img ${photoLoaded && !photoError ? "swipe-photo-visible" : ""}`}
                   loading="eager"
                   decoding="async"
-                  onError={() => setPhotoError(true)}
+                  onLoad={() => setPhotoLoaded(true)}
+                  onError={() => {
+                    setPhotoLoaded(false);
+                    setPhotoError(true);
+                  }}
                 />
               </div>
 

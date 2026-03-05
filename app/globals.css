@@ -416,6 +416,12 @@ body {
   object-fit: cover;
   position: relative;
   z-index: 2;
+  opacity: 0;
+  transition: opacity 0.28s ease;
+}
+
+.swipe-photo-visible {
+  opacity: 1;
 }
 
 .swipe-photo-fallback {
