@@ -355,6 +355,8 @@ body {
 .onboarding-splash-video-wrap {
   width: min(560px, 92vw);
   max-height: 62vh;
+  min-height: 220px;
+  position: relative;
   display: grid;
   place-items: center;
 }
@@ -363,6 +365,27 @@ body {
   width: 100%;
   max-height: 62vh;
   object-fit: contain;
+}
+
+.onboarding-video-placeholder {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: rgba(15, 23, 42, 0.68);
+  font-size: 14px;
+}
+
+.onboarding-video-play-btn {
+  position: absolute;
+  bottom: 8px;
+  border: 0;
+  border-radius: 999px;
+  padding: 10px 14px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #fff;
+  background: rgba(17, 24, 39, 0.86);
 }
 
 .onboarding-splash-content {

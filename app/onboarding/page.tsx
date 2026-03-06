@@ -37,6 +37,8 @@ export default function OnboardingPage() {
   const [splashProgress, setSplashProgress] = useState(0);
   const [profile, setProfile] = useState<ProfileForm>({ age: "", city: "", interests: [] });
   const splashVideoRef = useRef<HTMLVideoElement | null>(null);
+  const [manualVideoStart, setManualVideoStart] = useState(false);
+  const [videoReady, setVideoReady] = useState(false);
 
   const step = steps[stepIndex];
   const profileValid = validAge(profile.age) && Boolean(profile.city.trim()) && profile.interests.length > 0;
@@ -49,9 +51,29 @@ export default function OnboardingPage() {
     if (video) {
       video.muted = true;
       video.playsInline = true;
-      void video.play().catch(() => {
-        logClient("warn", "splash_video_autoplay_blocked", {});
-      });
+      video.defaultMuted = true;
+
+      const tryPlay = async () => {
+        try {
+          await video.play();
+          setManualVideoStart(false);
+        } catch {
+          setManualVideoStart(true);
+          logClient("warn", "splash_video_autoplay_blocked", {});
+        }
+      };
+
+      void tryPlay();
+      const retryTimer = window.setTimeout(() => void tryPlay(), 350);
+      const retryTimer2 = window.setTimeout(() => void tryPlay(), 900);
+      const onCanPlay = () => void tryPlay();
+      video.addEventListener("canplay", onCanPlay);
+
+      return () => {
+        window.clearTimeout(retryTimer);
+        window.clearTimeout(retryTimer2);
+        video.removeEventListener("canplay", onCanPlay);
+      };
     }
 
     const startedAt = Date.now();
@@ -128,7 +150,24 @@ export default function OnboardingPage() {
             playsInline
             loop
             preload="auto"
+            onLoadedData={() => setVideoReady(true)}
           />
+          {!videoReady ? <div className="onboarding-video-placeholder">Загружаем анимацию...</div> : null}
+          {manualVideoStart ? (
+            <button
+              type="button"
+              className="onboarding-video-play-btn"
+              onClick={() => {
+                const video = splashVideoRef.current;
+                if (!video) return;
+                void video.play()
+                  .then(() => setManualVideoStart(false))
+                  .catch(() => setManualVideoStart(true));
+              }}
+            >
+              Запустить анимацию
+            </button>
+          ) : null}
         </div>
 
         <div className="onboarding-splash-content">
