@@ -148,14 +148,17 @@ export default function OnboardingPage() {
           <video
             ref={splashVideoRef}
             className="onboarding-splash-video"
-            src="/video/logoanim.mp4"
             autoPlay
             muted
             playsInline
             loop
             preload="auto"
             onLoadedData={() => setVideoReady(true)}
-          />
+          >
+            <source src="/video/videoanim.webm" type="video/webm" />
+            <source src="/video/videoanim.mp4" type="video/mp4" />
+            <source src="/video/logoanim.mp4" type="video/mp4" />
+          </video>
           {!videoReady ? <div className="onboarding-video-placeholder">Загружаем анимацию...</div> : null}
           {manualVideoStart ? (
             <button
