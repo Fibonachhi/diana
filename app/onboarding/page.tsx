@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { CITIES, INTERESTS } from "@/src/lib/mock-data";
 import { useTelegramProfile } from "@/src/hooks/use-telegram-profile";
@@ -36,6 +36,7 @@ export default function OnboardingPage() {
   const [stepIndex, setStepIndex] = useState(0);
   const [splashProgress, setSplashProgress] = useState(0);
   const [profile, setProfile] = useState<ProfileForm>({ age: "", city: "", interests: [] });
+  const splashVideoRef = useRef<HTMLVideoElement | null>(null);
 
   const step = steps[stepIndex];
   const profileValid = validAge(profile.age) && Boolean(profile.city.trim()) && profile.interests.length > 0;
@@ -43,6 +44,15 @@ export default function OnboardingPage() {
 
   useEffect(() => {
     if (step !== "splash") return;
+
+    const video = splashVideoRef.current;
+    if (video) {
+      video.muted = true;
+      video.playsInline = true;
+      void video.play().catch(() => {
+        logClient("warn", "splash_video_autoplay_blocked", {});
+      });
+    }
 
     const startedAt = Date.now();
     const duration = 5600;
@@ -108,18 +118,24 @@ export default function OnboardingPage() {
   if (step === "splash") {
     return (
       <main className="onboarding-splash-root">
-        <video className="onboarding-splash-video" src="/video/logoanim.mp4" autoPlay muted playsInline loop preload="auto" />
-        <div className="onboarding-splash-overlay" />
+        <div className="onboarding-splash-video-wrap">
+          <video
+            ref={splashVideoRef}
+            className="onboarding-splash-video"
+            src="/video/logoanim.mp4"
+            autoPlay
+            muted
+            playsInline
+            loop
+            preload="auto"
+          />
+        </div>
 
         <div className="onboarding-splash-content">
-          <p className="onboarding-brand">PLUS ONE</p>
-          <h1 className="onboarding-splash-title">Плюс Один</h1>
-          <p className="onboarding-splash-subtitle">Мини-приложение знакомств через реальные встречи</p>
-
           <div className="onboarding-loader">
             <div className="onboarding-loader-fill" style={{ width: `${splashProgress}%` }} />
           </div>
-          <p className="onboarding-loader-text">Загрузка {splashProgress}%</p>
+          <p className="onboarding-loader-text">Плюс Один • загрузка {splashProgress}%</p>
         </div>
       </main>
     );
