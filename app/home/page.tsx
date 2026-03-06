@@ -6,9 +6,14 @@ import { LiquidGlassPanel } from "@/src/components/LiquidGlassPanel";
 import { ResponsivePhoto } from "@/src/components/responsive-photo";
 import { getEventsFromDb } from "@/src/lib/server-data";
 
-export default async function HomePage() {
+type HomePageProps = {
+  searchParams: Promise<{ city?: string }>;
+};
+
+export default async function HomePage({ searchParams }: HomePageProps) {
+  const params = await searchParams;
   const events = await getEventsFromDb();
-  const city = "Москва";
+  const city = params.city && params.city.trim().length > 0 ? params.city : "Москва";
   const cityEvents = events.filter((event) => event.city === city && event.status !== "finished");
 
   return (
