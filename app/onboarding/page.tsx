@@ -191,7 +191,7 @@ export default function OnboardingPage() {
 
   return (
     <main
-      className={`onboarding-canvas ${step === "how3" || step === "profile" ? "onboarding-canvas-bw" : ""}`}
+      className={`onboarding-canvas ${step === "how3" ? "onboarding-canvas-bw" : ""}`}
       style={{ backgroundImage: `url(${background})` }}
     >
       <div className="onboarding-shade" />

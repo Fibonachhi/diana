@@ -2,7 +2,6 @@ import Link from "next/link";
 import { AppShell } from "@/src/components/app-shell";
 import { LiquidGlassButton } from "@/src/components/LiquidGlassButton";
 import { LiquidGlassCard } from "@/src/components/LiquidGlassCard";
-import { LiquidGlassPanel } from "@/src/components/LiquidGlassPanel";
 import { ResponsivePhoto } from "@/src/components/responsive-photo";
 import { getEventsFromDb } from "@/src/lib/server-data";
 
@@ -19,11 +18,6 @@ export default async function HomePage({ searchParams }: HomePageProps) {
   return (
     <AppShell title="Встречи в городе" subtitle={`Город: ${city}`}>
       <div className="screen-stack">
-        <LiquidGlassPanel>
-          <p className="muted">Главный экран</p>
-          <p className="mt-2 muted">Актуальные встречи, живые локации и места в реальном времени из Supabase.</p>
-        </LiquidGlassPanel>
-
         <div className="event-grid">
           {cityEvents.map((event) => (
             <LiquidGlassCard key={event.id}>
