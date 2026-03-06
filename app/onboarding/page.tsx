@@ -47,35 +47,6 @@ export default function OnboardingPage() {
   useEffect(() => {
     if (step !== "splash") return;
 
-    const video = splashVideoRef.current;
-    if (video) {
-      video.muted = true;
-      video.playsInline = true;
-      video.defaultMuted = true;
-
-      const tryPlay = async () => {
-        try {
-          await video.play();
-          setManualVideoStart(false);
-        } catch {
-          setManualVideoStart(true);
-          logClient("warn", "splash_video_autoplay_blocked", {});
-        }
-      };
-
-      void tryPlay();
-      const retryTimer = window.setTimeout(() => void tryPlay(), 350);
-      const retryTimer2 = window.setTimeout(() => void tryPlay(), 900);
-      const onCanPlay = () => void tryPlay();
-      video.addEventListener("canplay", onCanPlay);
-
-      return () => {
-        window.clearTimeout(retryTimer);
-        window.clearTimeout(retryTimer2);
-        video.removeEventListener("canplay", onCanPlay);
-      };
-    }
-
     const startedAt = Date.now();
     const duration = 5600;
 
@@ -91,6 +62,39 @@ export default function OnboardingPage() {
     }, 80);
 
     return () => window.clearInterval(timer);
+  }, [step]);
+
+  useEffect(() => {
+    if (step !== "splash") return;
+
+    const video = splashVideoRef.current;
+    if (!video) return;
+
+    video.muted = true;
+    video.playsInline = true;
+    video.defaultMuted = true;
+
+    const tryPlay = async () => {
+      try {
+        await video.play();
+        setManualVideoStart(false);
+      } catch {
+        setManualVideoStart(true);
+        logClient("warn", "splash_video_autoplay_blocked", {});
+      }
+    };
+
+    void tryPlay();
+    const retryTimer = window.setTimeout(() => void tryPlay(), 350);
+    const retryTimer2 = window.setTimeout(() => void tryPlay(), 900);
+    const onCanPlay = () => void tryPlay();
+    video.addEventListener("canplay", onCanPlay);
+
+    return () => {
+      window.clearTimeout(retryTimer);
+      window.clearTimeout(retryTimer2);
+      video.removeEventListener("canplay", onCanPlay);
+    };
   }, [step]);
 
   function toggleInterest(interest: string) {
