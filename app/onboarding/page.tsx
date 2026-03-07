@@ -6,7 +6,7 @@ import { CITIES, INTERESTS } from "@/src/lib/mock-data";
 import { useTelegramProfile } from "@/src/hooks/use-telegram-profile";
 import { logClient } from "@/src/lib/logger";
 
-type StepId = "splash" | "welcome" | "how1" | "how2" | "how3" | "profile";
+type StepId = "splash" | "how1" | "how2" | "how3" | "profile";
 
 type ProfileForm = {
   age: string;
@@ -14,11 +14,10 @@ type ProfileForm = {
   interests: string[];
 };
 
-const steps: StepId[] = ["splash", "welcome", "how1", "how2", "how3", "profile"];
-const STORAGE_KEY = "plus_one_onboarding_v3";
+const steps: StepId[] = ["splash", "how1", "how2", "how3", "profile"];
+const STORAGE_KEY = "plus_one_onboarding_v4";
 
 const backgrounds: Record<Exclude<StepId, "splash" | "profile">, string> = {
-  welcome: "/images/onboard-1.jpg",
   how1: "/images/onboard-1.jpg",
   how2: "/images/onboard-2.jpg",
   how3: "/images/onboard-3.jpg",
@@ -42,7 +41,11 @@ export default function OnboardingPage() {
 
   const step = steps[stepIndex];
   const profileValid = validAge(profile.age) && Boolean(profile.city.trim()) && profile.interests.length > 0;
-  const progress = useMemo(() => Math.round(((stepIndex + 1) / steps.length) * 100), [stepIndex]);
+  const progress = useMemo(() => {
+    const totalSteps = steps.length - 1;
+    const current = Math.max(1, stepIndex);
+    return Math.round((current / totalSteps) * 100);
+  }, [stepIndex]);
 
   useEffect(() => {
     if (step !== "splash") return;
@@ -155,9 +158,9 @@ export default function OnboardingPage() {
             preload="auto"
             onLoadedData={() => setVideoReady(true)}
           >
-            <source src="/video/videoanim.webm" type="video/webm" />
+            <source src="/video/splash.webm" type="video/webm" />
+            <source src="/video/splash.mp4" type="video/mp4" />
             <source src="/video/videoanim.mp4" type="video/mp4" />
-            <source src="/video/logoanim.mp4" type="video/mp4" />
           </video>
           {!videoReady ? <div className="onboarding-video-placeholder">Загружаем анимацию...</div> : null}
           {manualVideoStart ? (
@@ -178,6 +181,9 @@ export default function OnboardingPage() {
         </div>
 
         <div className="onboarding-splash-content">
+          <p className="onboarding-splash-kicker">PLUS ONE</p>
+          <h1 className="onboarding-splash-title">Добро пожаловать в Плюс Один</h1>
+          <p className="onboarding-splash-subtitle">Клуб знакомств через реальные встречи</p>
           <div className="onboarding-loader">
             <div className="onboarding-loader-fill" style={{ width: `${splashProgress}%` }} />
           </div>
@@ -198,19 +204,11 @@ export default function OnboardingPage() {
 
       <section className="onboarding-layer">
         <div className="onboarding-top-meta">
-          <p>Шаг {stepIndex + 1} из {steps.length}</p>
+          <p>Шаг {Math.max(1, stepIndex)} из {steps.length - 1}</p>
           <div className="onboarding-mini-progress">
             <div className="onboarding-mini-progress-fill" style={{ width: `${progress}%` }} />
           </div>
         </div>
-
-        {step === "welcome" ? (
-          <div className="onboarding-compact-card">
-            <p className="onboarding-kicker">Добро пожаловать</p>
-            <h2>Клуб знакомств через реальные встречи</h2>
-            <p>Сначала живое событие. Потом выбор симпатии без бесконечных чатов.</p>
-          </div>
-        ) : null}
 
         {step === "how1" ? (
           <div className="onboarding-compact-card">

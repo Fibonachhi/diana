@@ -345,26 +345,36 @@ body {
   min-height: var(--tg-viewport-height, 100dvh);
   position: relative;
   overflow: hidden;
-  background: #fff;
+  background:
+    radial-gradient(circle at 12% 12%, rgba(129, 171, 255, 0.28), transparent 34%),
+    radial-gradient(circle at 88% 84%, rgba(202, 95, 255, 0.2), transparent 40%),
+    #030817;
   display: grid;
-  align-content: center;
-  justify-items: center;
-  padding: 20px;
+  align-content: end;
+  justify-items: stretch;
 }
 
 .onboarding-splash-video-wrap {
-  width: min(560px, 92vw);
-  max-height: 62vh;
-  min-height: 220px;
-  position: relative;
-  display: grid;
-  place-items: center;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.onboarding-splash-video-wrap::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(3, 8, 23, 0.26) 0%, rgba(3, 8, 23, 0.5) 56%, rgba(3, 8, 23, 0.8) 100%);
+  pointer-events: none;
 }
 
 .onboarding-splash-video {
-  width: 100%;
-  max-height: 62vh;
-  object-fit: contain;
+  width: 100vw;
+  height: 100dvh;
+  object-fit: cover;
 }
 
 .onboarding-video-placeholder {
@@ -372,7 +382,7 @@ body {
   inset: 0;
   display: grid;
   place-items: center;
-  color: rgba(15, 23, 42, 0.68);
+  color: rgba(221, 231, 255, 0.68);
   font-size: 14px;
 }
 
@@ -389,10 +399,41 @@ body {
 }
 
 .onboarding-splash-content {
-  width: min(560px, 92vw);
-  margin-top: 14px;
+  position: relative;
+  z-index: 3;
+  width: calc(100% - 28px);
+  max-width: 620px;
+  margin: 0 14px calc(env(safe-area-inset-bottom) + 18px);
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  background: rgba(8, 14, 34, 0.48);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  padding: 16px 16px 14px;
   display: grid;
-  gap: 8px;
+  gap: 10px;
+}
+
+.onboarding-splash-kicker {
+  margin: 0;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: rgba(224, 234, 255, 0.74);
+}
+
+.onboarding-splash-title {
+  margin: 0;
+  font-size: clamp(33px, 7.4vw, 50px);
+  line-height: 0.95;
+  color: #f4f8ff;
+}
+
+.onboarding-splash-subtitle {
+  margin: 0;
+  font-size: clamp(20px, 5.2vw, 29px);
+  line-height: 1.04;
+  color: rgba(228, 236, 255, 0.92);
 }
 
 .onboarding-loader {
@@ -413,8 +454,8 @@ body {
 .onboarding-loader-text {
   margin: 0;
   font-size: 12px;
-  text-align: center;
-  color: rgba(15, 23, 42, 0.82);
+  text-align: left;
+  color: rgba(220, 230, 255, 0.9);
 }
 
 .onboarding-canvas {
