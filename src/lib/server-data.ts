@@ -169,7 +169,27 @@ export async function getDeckForEvent(eventId: string, telegramId: number): Prom
     return [];
   }
 
-  const participantIds = (attendanceRows ?? []).map((row) => row.user_id).filter((id) => id !== me.id);
+  let participantIds = (attendanceRows ?? []).map((row) => row.user_id).filter((id) => id !== me.id);
+
+  // Fallback for fresh/legacy data where attendance was not marked yet.
+  // This keeps post-event deck usable right after payments.
+  if (participantIds.length === 0) {
+    const { data: paidRows, error: paidError } = await supabase
+      .from("event_registrations")
+      .select("user_id")
+      .eq("event_id", eventId)
+      .eq("status", "paid");
+
+    if (paidError) {
+      console.error("[plus-one] deck paid registrations query error", paidError.message);
+      return [];
+    }
+
+    participantIds = Array.from(
+      new Set((paidRows ?? []).map((row) => row.user_id).filter((id) => id !== me.id)),
+    );
+  }
+
   if (participantIds.length === 0) return [];
 
   const { data: swipes } = await supabase

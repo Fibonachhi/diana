@@ -367,7 +367,7 @@ body {
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(180deg, rgba(3, 8, 23, 0.26) 0%, rgba(3, 8, 23, 0.5) 56%, rgba(3, 8, 23, 0.8) 100%);
+    linear-gradient(180deg, rgba(3, 8, 23, 0.02) 0%, rgba(3, 8, 23, 0.18) 52%, rgba(3, 8, 23, 0.66) 100%);
   pointer-events: none;
 }
 
