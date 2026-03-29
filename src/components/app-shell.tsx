@@ -8,12 +8,11 @@ type AppShellProps = {
   subtitle?: string;
   children: React.ReactNode;
   showTabs?: boolean;
-  showHeader?: boolean;
 };
 
 const buildId = process.env.NEXT_PUBLIC_BUILD_ID ?? "local";
 
-export function AppShell({ title, subtitle, children, showTabs = true, showHeader = false }: AppShellProps) {
+export function AppShell({ title, subtitle, children, showTabs = true }: AppShellProps) {
 
   return (
     <main className="app-root">
@@ -25,19 +24,18 @@ export function AppShell({ title, subtitle, children, showTabs = true, showHeade
       <Image src="/glass-orb.svg" alt="" width={260} height={260} className="bg-orb bg-orb-right" priority />
 
       <div className="app-frame">
-        {showHeader ? (
-          <header className="liquidGlass app-header">
-            <span className="glassEdge" />
-            <Image src="/glass-strip.svg" alt="" width={640} height={140} className="header-strip" />
-            <div className="header-top">
-              <p className="eyebrow">PLUS ONE CLUB</p>
+        <header className="liquidGlass app-header app-header-v2">
+          <span className="glassEdge" />
+          <div className="header-brand">
+            <Image src="/brand/logo-plus-odin.png" alt="Плюс Один" width={56} height={56} className="header-brand-logo" />
+            <div>
+              <p className="eyebrow">PLUS ONE WORLD</p>
+              <h1>{title}</h1>
             </div>
-            <h1>{title}</h1>
-            {subtitle ? <p className="subtitle">{subtitle}</p> : null}
-          </header>
-        ) : (
+          </div>
+          {subtitle ? <p className="subtitle">{subtitle}</p> : null}
           <div className="build-badge">build: {buildId}</div>
-        )}
+        </header>
 
         <section className="app-content">{children}</section>
       </div>
