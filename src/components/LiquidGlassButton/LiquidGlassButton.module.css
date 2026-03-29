@@ -24,21 +24,21 @@
 }
 
 .primary {
-  color: #f8f8ff;
-  background: linear-gradient(120deg, rgba(93, 108, 255, 0.84), rgba(177, 85, 255, 0.84));
-  border: 1px solid rgba(170, 176, 255, 0.75);
-  box-shadow: 0 14px 34px rgba(50, 47, 122, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  color: #13233d;
+  background: linear-gradient(120deg, rgba(157, 198, 255, 0.94), rgba(146, 230, 213, 0.92));
+  border: 1px solid rgba(143, 183, 224, 0.75);
+  box-shadow: 0 10px 24px rgba(101, 130, 168, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.75);
 }
 
 .accent {
-  color: #1b1430;
-  background: linear-gradient(125deg, rgba(246, 218, 142, 0.92), rgba(244, 160, 113, 0.9));
-  border: 1px solid rgba(255, 223, 149, 0.72);
-  box-shadow: 0 12px 30px rgba(91, 59, 13, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.45);
+  color: #15243f;
+  background: linear-gradient(125deg, rgba(255, 223, 161, 0.95), rgba(255, 179, 147, 0.92));
+  border: 1px solid rgba(240, 189, 145, 0.75);
+  box-shadow: 0 10px 24px rgba(163, 120, 80, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.78);
 }
 
 .ghost {
-  color: rgba(236, 242, 255, 0.95);
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #30496e;
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(150, 171, 205, 0.45);
 }

@@ -10,7 +10,7 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-manrope);
+  --font-sans: var(--font-exo2);
 }
 
 * {
@@ -23,7 +23,7 @@ body {
   min-height: 100dvh;
   overflow-x: hidden;
   color: var(--foreground);
-  font-family: var(--font-manrope), sans-serif;
+  font-family: var(--font-exo2), sans-serif;
   background:
     radial-gradient(circle at 12% 6%, rgba(74, 117, 255, 0.4), transparent 32%),
     radial-gradient(circle at 84% 7%, rgba(205, 76, 255, 0.26), transparent 31%),
@@ -1259,4 +1259,163 @@ body {
   .games-scroll {
     grid-auto-columns: 76%;
   }
+}
+
+/* -------- Full Light Rebrand -------- */
+:root {
+  --background: #f8f6f1;
+  --foreground: #1c2433;
+}
+
+html,
+body {
+  color: #1c2433;
+  background:
+    radial-gradient(circle at 8% -5%, rgba(255, 208, 153, 0.6), transparent 33%),
+    radial-gradient(circle at 95% 8%, rgba(153, 192, 255, 0.5), transparent 30%),
+    radial-gradient(circle at 40% 100%, rgba(147, 230, 201, 0.35), transparent 34%),
+    linear-gradient(180deg, #fffdf8 0%, #f6f3ee 58%, #f0ece6 100%);
+}
+
+.ambient,
+.bg-orb {
+  opacity: 0.3;
+  filter: blur(70px);
+}
+
+.app-root {
+  background: transparent;
+}
+
+.app-header-v2 {
+  background: linear-gradient(125deg, rgba(255, 255, 255, 0.9), rgba(245, 249, 255, 0.85));
+  border-color: rgba(145, 166, 203, 0.35);
+}
+
+.eyebrow {
+  color: rgba(68, 84, 112, 0.8);
+}
+
+.app-header-v2 h1,
+.screen-title,
+.event-title,
+.section-row h2 {
+  color: #152033;
+}
+
+.subtitle,
+.event-meta,
+.muted,
+.game-card p,
+.onboarding-v2-card p,
+.onboarding-v2-hint {
+  color: rgba(52, 68, 96, 0.86);
+}
+
+.build-badge {
+  border-color: rgba(144, 166, 207, 0.4);
+  background: rgba(255, 255, 255, 0.75);
+  color: rgba(54, 69, 94, 0.8);
+}
+
+.mini-tabs {
+  background: rgba(255, 255, 255, 0.84);
+  border-color: rgba(132, 157, 202, 0.34);
+  box-shadow: 0 20px 45px rgba(90, 114, 150, 0.2);
+}
+
+.mini-tab {
+  color: rgba(65, 83, 114, 0.88);
+}
+
+.mini-tab-active {
+  color: #172034;
+  background: linear-gradient(122deg, #ffd797, #ffb79a);
+}
+
+.input,
+.details-pill,
+.event-chip,
+.hub-metric,
+.onboarding-v2-progress-block,
+.onboarding-v2-card,
+.map-preview,
+.taste-card,
+.onboarding-v2-btn {
+  border-color: rgba(137, 162, 204, 0.35);
+  background: rgba(255, 255, 255, 0.75);
+  color: #18243b;
+}
+
+.input::placeholder {
+  color: rgba(79, 101, 137, 0.58);
+}
+
+.input:focus {
+  outline: 2px solid rgba(111, 149, 233, 0.42);
+}
+
+.map-preview {
+  background:
+    linear-gradient(120deg, rgba(191, 213, 255, 0.4), rgba(255, 255, 255, 0.8)),
+    repeating-linear-gradient(45deg, rgba(73, 101, 142, 0.05) 0 10px, rgba(73, 101, 142, 0.1) 10px 20px);
+}
+
+.game-card,
+.onboarding-v2-card,
+.liquidGlass {
+  box-shadow: 0 14px 34px rgba(90, 109, 140, 0.18);
+}
+
+.brand-splash {
+  background:
+    radial-gradient(circle at 50% -15%, rgba(255, 190, 129, 0.45), transparent 38%),
+    radial-gradient(circle at 100% 0%, rgba(147, 185, 255, 0.42), transparent 35%),
+    linear-gradient(180deg, #fffcf6 0%, #f7f3ec 100%);
+}
+
+.brand-splash-bg {
+  background:
+    radial-gradient(circle at 50% 30%, rgba(255, 228, 180, 0.55), transparent 33%),
+    radial-gradient(circle at 50% 84%, rgba(173, 207, 255, 0.48), transparent 35%);
+}
+
+.brand-splash-logo-wrap h1 {
+  color: #13253e;
+}
+
+.brand-splash-logo-wrap p,
+.brand-loader-label {
+  color: rgba(49, 71, 106, 0.82);
+}
+
+.brand-loader {
+  background: rgba(79, 101, 137, 0.2);
+}
+
+.onboarding-v2 {
+  background:
+    radial-gradient(circle at 95% -10%, rgba(142, 187, 255, 0.5), transparent 34%),
+    radial-gradient(circle at 0% 90%, rgba(255, 204, 141, 0.42), transparent 34%),
+    linear-gradient(180deg, #fffdf8 0%, #f5f0e8 100%);
+}
+
+.onboarding-v2-kicker,
+.onboarding-v2-field span,
+.onboarding-v2-progress-block p {
+  color: rgba(75, 95, 130, 0.76);
+}
+
+.onboarding-v2-btn-primary,
+.button.accent,
+.button.primary {
+  color: #162338;
+}
+
+.onboarding-v2-btn-primary {
+  background: linear-gradient(120deg, #ffd89f, #ffb59d);
+}
+
+.section-link {
+  color: #2f5fb6;
 }
